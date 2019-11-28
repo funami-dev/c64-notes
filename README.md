@@ -2,9 +2,11 @@
 
 > Manage your notes - like it was 1986 C=
 
+![alt text](https://raw.githubusercontent.com/DerFu/c64-notes/master/static/img/c64-notes.png)
+
 #### Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
