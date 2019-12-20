@@ -25,6 +25,7 @@ html {
 }
 
 textarea,
+input,
 body,
 html {
   font-size: 16px;

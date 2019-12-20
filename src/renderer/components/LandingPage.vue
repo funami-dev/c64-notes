@@ -1,18 +1,26 @@
 <template>
   <div id="wrapper">
     <div>
-      <textarea name=""
-                id=""
-                cols="30"
-                rows="10"
-                v-model="currentNote.msg"></textarea>
+      <textarea
+        name=""
+        id=""
+        cols="30"
+        rows="10"
+        v-model="currentNote.msg"
+      ></textarea>
     </div>
     <div class="notes--list">
       <ul>
-        <li v-for="note in notes"
-            :key="note.uuid"
-            @click="setCurrentNoteId(note.uuid)">{{note.title}} <span
-                @click="removeNote(note.uuid)">(-)</span></li>
+        <li
+          v-for="note in notes"
+          :key="note.uuid"
+          @click="setCurrentNoteId(note.uuid)"
+        >
+          <input v-if="editMode" type="text" v-model="note.title" />
+          <span v-else>{{ note.title }}</span>
+          <span @click="toggleTitle()">({{ editMode ? " " : "/" }})</span>
+          <span @click="removeNote(note.uuid)">(-)</span>
+        </li>
       </ul>
       <ul>
         <li @click="addNote">(+)add</li>
@@ -23,43 +31,25 @@
 </template>
 
 <script>
-import { log } from "util";
+import uuidv4 from "uuid";
+
 export default {
   name: "landing-page",
   computed: {
     currentNote() {
-      console.log(this.currentNoteId);
-
       return this.notes.find(el => el.uuid === this.currentNoteId) || "";
     }
   },
   data() {
     return {
       currentNoteId: null,
+      editMode: false,
       notes: [
         {
-          uuid: "fewneh9ehe9hweffvhewfnewu9",
+          uuid: uuidv4(),
           title: "lorem lauren",
           msg: "sanfk efef ef wefwkvwj  enfkwfw",
-          date: null
-        },
-        {
-          uuid: "fewneh9effhe9hwevhewfnewu9",
-          title: "vmdvmm3m3f lauren",
-          msg: "sanewfewfwefwkvwj  enfkwfw",
-          date: null
-        },
-        {
-          uuid: "fewneh9ehe9hwevhewfnewu9",
-          title: "lorfewfwefwefewem lauren",
-          msg: "feveewfewfwkvwj  enfkwfw",
-          date: null
-        },
-        {
-          uuid: "edefefefe",
-          title: "fewfewfewf lauren",
-          msg: "fewf efl ewfwfwwkvwj  enfkwfw",
-          date: null
+          date: new Date()
         }
       ]
     };
@@ -70,11 +60,14 @@ export default {
     },
     addNote() {
       this.notes.push({
-        uuid: "scdcd",
-        title: "1",
+        uuid: uuidv4(),
+        title: "Title",
         msg: "",
-        date: ""
+        date: new Date()
       });
+    },
+    toggleTitle() {
+      this.editMode = !this.editMode;
     },
     setCurrentNoteId(id) {
       this.currentNoteId = id;
@@ -100,6 +93,12 @@ export default {
     resize: none;
     width: 100%;
     height: 100%;
+  }
+  input {
+    background: none;
+    border: 0;
+    color: $primary;
+    outline: none;
   }
   .notes--list {
     display: flex;
