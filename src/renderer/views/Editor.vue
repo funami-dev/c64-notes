@@ -23,7 +23,7 @@
         </li>
       </ul>
       <ul>
-        <li @click="addNote">(+)add</li>
+        <li @click="addNote()">(+)add</li>
         <li @click="open('https://twitter.com/fvnami')">(∆)fvnami</li>
       </ul>
     </div>
@@ -31,46 +31,22 @@
 </template>
 
 <script>
-import uuidv4 from "uuid";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
-  name: "landing-page",
+  name: "editor",
   computed: {
-    currentNote() {
-      return this.notes.find(el => el.uuid === this.currentNoteId) || "";
-    }
+    ...mapGetters("Notes", ["notes", "currentNoteId", "currentNote"])
   },
   data() {
     return {
-      currentNoteId: null,
-      editMode: false,
-      notes: [
-        {
-          uuid: uuidv4(),
-          title: "lorem lauren",
-          msg: "sanfk efef ef wefwkvwj  enfkwfw",
-          date: new Date()
-        }
-      ]
+      editMode: false
     };
   },
   methods: {
-    removeNote(id) {
-      this.notes = this.notes.filter(el => el.uuid !== id);
-    },
-    addNote() {
-      this.notes.push({
-        uuid: uuidv4(),
-        title: "Title",
-        msg: "",
-        date: new Date()
-      });
-    },
+    ...mapActions("Notes", ["addNote", "removeNote", "setCurrentNoteId"]),
     toggleTitle() {
       this.editMode = !this.editMode;
-    },
-    setCurrentNoteId(id) {
-      this.currentNoteId = id;
     },
     open(link) {
       this.$electron.shell.openExternal(link);
